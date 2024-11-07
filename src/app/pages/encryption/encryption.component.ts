@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { HttpResponse } from '@angular/common/http';
 
+
 @Component({
   selector: 'app-encryption',
   standalone: true,
@@ -12,8 +13,8 @@ import { HttpResponse } from '@angular/common/http';
   styleUrl: './encryption.component.css'
 })
 export class EncryptionComponent {
-  data = '';
-  password = '';
+  data: string = '';
+  password: string = '';
   encryptedData = '';
   decryptedData = '';
   encryptionType = 'text'; // 'text' o 'file'
@@ -26,17 +27,43 @@ export class EncryptionComponent {
   decryptedFileName = '';
   message = '';
   isErrorMessage = false;
+  // Variables para la generación de claves
+  passphrase = '';
+  fullName = '';
+  email = '';
+  publicKey = '';
+  privateKey = '';
+  identity = '';
+
+  showCreatorInfo: boolean = false;
+  isTouchDevice: boolean = false;
+  ngOnInit() {
+    this.isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  }
 
   constructor(private encryptionService: EncryptionService) { }
 
+
+   // Método para alternar la visibilidad
+   toggleCreatorInfo() {
+    this.showCreatorInfo = !this.showCreatorInfo;
+  }
+
+  // Método para cerrar la información
+  closeCreatorInfo() {
+    this.showCreatorInfo = false;
+  }
   onEncryptionTypeChange() {
-    // Limpia todos los campos cuando cambia el tipo de cifrado
-    this.clear();
-    // Establece el valor por defecto de fileAction si es necesario
+    this.clear(); // Limpia todos los campos
+  
+    // Opciones específicas
     if (this.encryptionType === 'file') {
-      this.fileAction = 'encrypt'; // O el valor que prefieras por defecto
+      this.fileAction = 'encrypt'; // Valor por defecto
     }
   }
+  
+  
+  
 
   onFileActionChange() {
     // Limpia los campos específicos de la acción de archivo
@@ -67,17 +94,17 @@ export class EncryptionComponent {
 
   encrypt() {
     if (this.encryptionType === 'text') {
-      this.encryptionService.encrypt(this.data, this.password).subscribe(
-        result => {
+      this.encryptionService.encrypt(this.data, this.password).subscribe({
+        next: result => {
           this.encryptedData = result;
           this.showMessage('Texto cifrado correctamente.');
         },
-        error => console.error('Encryption failed', error)
-      );
+        error: error => console.error('Encryption failed', error)
+      });
     } else if (this.encryptionType === 'file' && this.fileAction === 'encrypt') {
       if (this.selectedFile) {
-        this.encryptionService.encryptFile(this.selectedFile, this.password).subscribe(
-          (response: HttpResponse<Blob>) => {
+        this.encryptionService.encryptFile(this.selectedFile, this.password).subscribe({
+          next: (response: HttpResponse<Blob>) => {
             const blob = response.body;
             if (blob) {
               const filename = this.getFileNameFromResponse(response);
@@ -88,8 +115,8 @@ export class EncryptionComponent {
               console.error('El cuerpo de la respuesta es nulo');
             }
           },
-          error => console.error('File encryption failed', error)
-        );
+          error: error => console.error('File encryption failed', error)
+        });
       } else {
         console.error('No se ha seleccionado ningún archivo para cifrar');
       }
@@ -97,23 +124,24 @@ export class EncryptionComponent {
       console.error('Acción no válida para cifrado');
     }
   }
+  
 
   decrypt() {
     if (this.encryptionType === 'text') {
-      this.encryptionService.decrypt(this.encryptedData, this.password).subscribe(
-        result => {
+      this.encryptionService.decrypt(this.encryptedData, this.password).subscribe({
+        next: result => {
           this.decryptedData = result;
           this.showMessage('Texto descifrado correctamente.');
         },
-        error => {
+        error: error => {
           console.error('Decryption failed', error);
           this.showErrorMessage('Error al descifrar el texto. Por favor, verifica la contraseña y los datos ingresados.');
         }
-      );
+      });
     } else if (this.encryptionType === 'file' && this.fileAction === 'decrypt') {
       if (this.decryptionFile) {
-        this.encryptionService.decryptFile(this.decryptionFile, this.password).subscribe(
-          (response: HttpResponse<Blob>) => {
+        this.encryptionService.decryptFile(this.decryptionFile, this.password).subscribe({
+          next: (response: HttpResponse<Blob>) => {
             const blob = response.body;
             if (blob) {
               const filename = this.getFileNameFromResponse(response);
@@ -125,11 +153,11 @@ export class EncryptionComponent {
               this.showErrorMessage('Error al descifrar el archivo.');
             }
           },
-          error => {
+          error: error => {
             console.error('File decryption failed', error);
             this.showErrorMessage('Error al descifrar el archivo. Por favor, verifica la contraseña y el archivo seleccionado.');
           }
-        );
+        });
       } else {
         console.error('No se ha seleccionado ningún archivo para descifrar');
         this.showErrorMessage('Por favor, selecciona un archivo para descifrar.');
@@ -138,6 +166,7 @@ export class EncryptionComponent {
       console.error('Acción no válida para descifrado');
     }
   }
+  
   
 
   getFileNameFromResponse(response: HttpResponse<Blob>): string {
@@ -164,18 +193,59 @@ export class EncryptionComponent {
   }
 
   clear() {
-    this.data = '';
-    this.password = '';
-    this.encryptedData = '';
-    this.decryptedData = '';
-    this.selectedFile = null;
-    this.decryptionFile = null;
-    this.encryptedFileUrl = null;
-    this.decryptedFileUrl = null;
-    this.encryptedFileName = '';
-    this.decryptedFileName = '';
-    this.message = '';
+  this.data = '';
+  this.password = '';
+  this.fileAction = 'encrypt';
+  this.encryptedData = '';
+  this.decryptedData = '';
+  this.encryptedFileUrl = '';
+  this.decryptedFileUrl = '';
+  this.encryptedFileName = '';
+  this.decryptedFileName = '';
+  this.message = '';
+  this.isErrorMessage = false;
+
+  // Campos de generación de claves
+  this.passphrase = '';
+  this.fullName = '';
+  this.email = '';
+  this.publicKey = '';
+  this.privateKey = '';
+  this.identity = '';
+}
+
+  //cifrado ascimetrico
+  generateKeys() {
+    if (this.passphrase && this.fullName && this.email) {
+      this.identity = `${this.fullName} <${this.email}>`;
+      this.encryptionService.generateKeys(this.passphrase, this.identity).subscribe({
+        next: keys => {
+          this.publicKey = keys.publicKey;
+          this.privateKey = keys.privateKey;
+          this.showMessage('Claves generadas correctamente.');
+        },
+        error: error => {
+          console.error('Key generation failed', error);
+          this.showErrorMessage('Error al generar las claves.');
+        }
+      });
+    } else {
+      this.showErrorMessage('Por favor, completa todos los campos.');
+    }
   }
+  
+
+  downloadKey(keyContent: string, filename: string) {
+    const blob = new Blob([keyContent], { type: 'text/plain;charset=utf-8' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+  
+  
 
 
   

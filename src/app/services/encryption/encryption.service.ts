@@ -41,5 +41,11 @@ export class EncryptionService {
       observe: 'response'
     });
   }
+
+  generateKeys(passphrase: string, identity: string): Observable<{ publicKey: string; privateKey: string }> {
+    const params = new HttpParams().set('passphrase', passphrase).set('identity', identity);
+    return this.http.post<{ publicKey: string; privateKey: string }>(`${this.apiUrl}/generate-keys`, null, { params });
+  }
+  
   
 }

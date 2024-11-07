@@ -69,7 +69,7 @@ label {
 }
 
 /* Campos de entrada y selectores */
-select, input[type="password"], textarea, input[type="file"] {
+select, input[type="password"], input[type="text"], textarea, input[type="file"] {
     width: 100%;
     padding: 10px;
     border: 1px solid #dfe3e8;
@@ -81,7 +81,7 @@ select, input[type="password"], textarea, input[type="file"] {
     transition: all 0.3s ease;
 }
 
-select:focus, input[type="password"]:focus, textarea:focus, input[type="file"]:focus {
+select:focus, input[type="password"]:focus, input[type="text"]:focus, textarea:focus, input[type="file"]:focus {
     outline: none;
     border-color: #6c63ff;
     box-shadow: 0 0 8px rgba(108, 99, 255, 0.3);
@@ -178,6 +178,8 @@ h3 {
     word-wrap: break-word;
     margin-bottom: 10px;
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+    width: 100%;
+    min-height: 100px;
 }
 
 /* Ajustes para inputs tipo file */
@@ -206,23 +208,66 @@ a:hover {
     color: #3522df;
 }
 
-.alert {
-    padding: 15px;
-    color: white;
-    margin-top: 20px;
-    border-radius: 5px;
-    position: relative;
-    transition: opacity 0.6s;
-    opacity: 1;
-  }
-  
-  /* Estilo para mensajes de éxito */
-  .alert:not(.error) {
-    background-color: #4CAF50; /* Verde */
-  }
-  
-  /* Estilo para mensajes de error */
-  .alert.error {
+/* Estilo para mensajes de error */
+.alert.error {
     background-color: #f44336; /* Rojo */
+}
+
+/* Estilos para la información del creador */
+/* Tus estilos existentes */
+
+/* Estilos para la letra resaltada */
+.highlight-letter {
+    display: inline-block;
+    transition: color 0.3s ease, transform 0.3s ease;
   }
   
+  /* Efecto al pasar el mouse por encima del título */
+  h2:hover .highlight-letter {
+    color: #6c63ff;
+    transform: scale(1.2);
+  }
+  
+  /* Estilos para la información del creador */
+  .creator-info {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.8);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .creator-info.visible {
+    display: flex;
+  }
+  
+  .creator-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .creator-content h4 {
+    margin-bottom: 10px;
+  }
+  
+  .creator-content button {
+    margin-top: 15px;
+    padding: 8px 16px;
+    background-color: #6c63ff;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .creator-content button:hover {
+    background-color: #5548c8;
+  }
+    
