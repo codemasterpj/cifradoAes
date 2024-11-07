@@ -1,61 +1,100 @@
 <div class="container">
-  <div class="content">
+    <div class="content">
       <h2>Cifrado de Documentos</h2>
       
-      <label>Tipo de Cifrado:</label>
-      <select [(ngModel)]="encryptionType">
+      <!-- Selección de Tipo de Cifrado -->
+      <div class="form-group">
+        <label>Tipo de Cifrado:</label>
+        <select [(ngModel)]="encryptionType" (ngModelChange)="onEncryptionTypeChange()">
           <option value="text">Texto</option>
           <option value="file">Archivo</option>
-      </select>
+        </select>
+      </div>
       
+      <!-- Sección para Texto -->
       <div *ngIf="encryptionType === 'text'">
-          <label>Texto a Cifrar:</label>
+        <div class="form-group">
+          <label>Texto:</label>
           <textarea [(ngModel)]="data"></textarea>
-      </div>
-
-      <div *ngIf="encryptionType === 'file'">
-          <label>Archivo a Cifrar:</label>
-          <input type="file" (change)="onFileSelected($event)">
-      </div>
-
-      <label>Contraseña:</label>
-      <input type="password" [(ngModel)]="password">
-
-      <button (click)="encrypt()">Cifrar</button>
-
-      <div *ngIf="encryptionType === 'text'">
+        </div>
+        
+        <div class="form-group">
+          <label>Contraseña:</label>
+          <input type="password" [(ngModel)]="password">
+        </div>
+        
+        <div class="button-group">
+          <button (click)="encrypt()">Cifrar</button>
+          <button (click)="decrypt()">Descifrar</button>
+        </div>
+        
+        <div *ngIf="encryptedData">
           <h3>Texto Cifrado</h3>
-          <p>{{ encryptedData }}</p>
-      </div>
-
-      <div *ngIf="encryptionType === 'file'">
-          <h3>Archivo Cifrado</h3>
-          <a *ngIf="encryptedFileUrl" [href]="encryptedFileUrl" download="archivo_cifrado.aes">Descargar Archivo Cifrado</a>
-      </div>
-
-      <button (click)="decrypt()">Descifrar</button>
-
-      <div *ngIf="encryptionType === 'text'">
+          <p class="output-text">{{ encryptedData }}</p>
+        </div>
+        
+        <div *ngIf="decryptedData">
           <h3>Texto Descifrado</h3>
-          <p>{{ decryptedData }}</p>
+          <p class="output-text">{{ decryptedData }}</p>
+        </div>
       </div>
-
+      
+      <!-- Sección para Archivo -->
       <div *ngIf="encryptionType === 'file'">
-          <label>Archivo a Descifrar:</label>
-          <input type="file" (change)="onDecryptionFileSelected($event)">
+        <div class="form-group">
+          <label>Acción:</label>
+          <select [(ngModel)]="fileAction" (ngModelChange)="onFileActionChange()">
+            <option value="encrypt">Cifrar</option>
+            <option value="decrypt">Descifrar</option>
+          </select>
+        </div>
+        
+        <!-- Campos para Cifrar Archivo -->
+        <div *ngIf="fileAction === 'encrypt'">
+          <div class="form-group">
+            <label>Archivo a Cifrar:</label>
+            <input type="file" (change)="onFileSelected($event)">
+          </div>
           
-          <h3>Archivo Descifrado</h3>
-          <a *ngIf="decryptedFileUrl" [href]="decryptedFileUrl" download="archivo_descifrado.txt">Descargar Archivo Descifrado</a>
+          <div class="form-group">
+            <label>Contraseña:</label>
+            <input type="password" [(ngModel)]="password">
+          </div>
+          
+          <button (click)="encrypt()">Cifrar</button>
+          
+          <div *ngIf="encryptedFileUrl">
+            <h3>Archivo Cifrado</h3>
+            <a [href]="encryptedFileUrl" [download]="encryptedFileName" class="download-link">Descargar Archivo Cifrado</a>
+          </div>
+        </div>
+        
+        <!-- Campos para Descifrar Archivo -->
+        <div *ngIf="fileAction === 'decrypt'">
+          <div class="form-group">
+            <label>Archivo a Descifrar:</label>
+            <input type="file" (change)="onFileSelected($event)">
+          </div>
+          
+          <div class="form-group">
+            <label>Contraseña:</label>
+            <input type="password" [(ngModel)]="password">
+          </div>
+          
+          <button (click)="decrypt()">Descifrar</button>
+          
+          <div *ngIf="decryptedFileUrl">
+            <h3>Archivo Descifrado</h3>
+            <a [href]="decryptedFileUrl" [download]="decryptedFileName" class="download-link">Descargar Archivo Descifrado</a>
+          </div>
+        </div>
       </div>
-
-      <div *ngIf="message" class="alert">
+      
+      <!-- Mensaje de Alerta -->
+      <div *ngIf="message" [ngClass]="{'alert': true, 'error': isErrorMessage}">
         <span>{{ message }}</span>
       </div>
-    
-
-
-
-
-      <button (click)="clear()">Limpiar</button>
+      
+    </div>
   </div>
-</div>
+  

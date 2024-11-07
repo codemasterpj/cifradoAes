@@ -21,8 +21,9 @@ body, html {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
-    width: 100vw;
+    padding: 20px;
+    min-height: 100vh;
+    width: 100%;
 }
 
 /* Contenedor del formulario */
@@ -31,31 +32,11 @@ body, html {
     padding: 40px;
     border-radius: 16px;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    max-width: 450px;
-    width: 90%;
+    max-width: 500px;
+    width: 100%;
     text-align: left;
     animation: fadeIn 0.8s ease-out;
 }
-
-.alert {
-    padding: 15px;
-    background-color: #4CAF50; /* Color verde para éxito */
-    color: white;
-    margin-top: 10px;
-    border-radius: 5px;
-    position: relative;
-    transition: opacity 0.6s; /* Animación de desvanecimiento */
-    opacity: 1; /* Visibilidad inicial */
-  }
-  
-  .closebtn {
-    position: absolute;
-    top: 0;
-    right: 10px;
-    font-size: 20px;
-    cursor: pointer;
-  }
-  
 
 /* Animación de entrada */
 @keyframes fadeIn {
@@ -72,9 +53,9 @@ body, html {
 /* Título del formulario */
 h2 {
     color: #333;
-    font-size: 24px;
+    font-size: 28px;
     font-weight: 700;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
     text-align: center;
 }
 
@@ -88,7 +69,7 @@ label {
 }
 
 /* Campos de entrada y selectores */
-select, input[type="password"], textarea {
+select, input[type="password"], textarea, input[type="file"] {
     width: 100%;
     padding: 10px;
     border: 1px solid #dfe3e8;
@@ -100,7 +81,7 @@ select, input[type="password"], textarea {
     transition: all 0.3s ease;
 }
 
-select:focus, input[type="password"]:focus, textarea:focus {
+select:focus, input[type="password"]:focus, textarea:focus, input[type="file"]:focus {
     outline: none;
     border-color: #6c63ff;
     box-shadow: 0 0 8px rgba(108, 99, 255, 0.3);
@@ -116,19 +97,18 @@ textarea {
 button {
     width: auto;
     padding: 10px 20px;
-    margin-top: 15px;
+    margin-top: 20px;
     background-color: #6c63ff;
     color: white;
     border: none;
     border-radius: 8px;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 10px rgba(108, 99, 255, 0.2);
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
+    display: inline-block;
+    margin-right: 10px;
 }
 
 button:hover {
@@ -142,10 +122,56 @@ button:active {
     box-shadow: 0 4px 8px rgba(85, 72, 200, 0.2);
 }
 
+/* Contenedor de botones */
+.button-group {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+/* Enlaces de descarga */
+.download-link {
+    color: #6c63ff;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 15px;
+    font-size: 15px;
+    transition: color 0.3s ease;
+}
+
+.download-link:hover {
+    color: #3522df;
+}
+
+/* Estilos para mensajes y alertas */
+.alert {
+    padding: 15px;
+    background-color: #4CAF50; /* Color verde para éxito */
+    color: white;
+    margin-top: 20px;
+    border-radius: 5px;
+    position: relative;
+    transition: opacity 0.6s;
+    opacity: 1;
+}
+
+/* Títulos de sección */
+h3 {
+    font-size: 20px;
+    color: #333;
+    font-weight: 600;
+    padding-bottom: 5px;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e8ebf0;
+    width: 100%;
+}
+
 /* Texto de salida cifrado/descifrado */
-p {
+.output-text {
     background-color: #f1f3f5;
-    padding: 10px;
+    padding: 15px;
     border-radius: 8px;
     font-size: 15px;
     color: #333;
@@ -154,14 +180,25 @@ p {
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* Enlace de descarga */
+/* Ajustes para inputs tipo file */
+input[type="file"] {
+    padding: 5px;
+}
+
+/* Espaciado entre elementos */
+.form-group {
+    margin-bottom: 15px;
+}
+
+/* Estilos para los selectores */
+select {
+    cursor: pointer;
+}
+
+/* Enlaces dentro de los textos */
 a {
     color: #6c63ff;
     text-decoration: none;
-    font-weight: bold;
-    display: inline-block;
-    margin-top: 10px;
-    font-size: 14px;
     transition: color 0.3s ease;
 }
 
@@ -169,14 +206,23 @@ a:hover {
     color: #3522df;
 }
 
-/* Títulos de sección */
-h3 {
-    font-size: 18px;
-    color: #333;
-    font-weight: 600;
-    padding-bottom: 5px;
+.alert {
+    padding: 15px;
+    color: white;
     margin-top: 20px;
-    margin-bottom: 10px;
-    border-bottom: 2px solid #e8ebf0;
-    width: 100%;
-}
+    border-radius: 5px;
+    position: relative;
+    transition: opacity 0.6s;
+    opacity: 1;
+  }
+  
+  /* Estilo para mensajes de éxito */
+  .alert:not(.error) {
+    background-color: #4CAF50; /* Verde */
+  }
+  
+  /* Estilo para mensajes de error */
+  .alert.error {
+    background-color: #f44336; /* Rojo */
+  }
+  
